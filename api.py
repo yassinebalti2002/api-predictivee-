@@ -318,7 +318,7 @@ def _predict_one(capteur: CapteurInput, iteration: int) -> CapteurResult:
 
     n_anomaly = sum(1 for v in votes_raw.values() if v == -1)
     n_total   = len(votes_raw)
-    anomaly   = n_anomaly >= (n_total // 2 + 1)
+    anomaly   = n_anomaly >= (n_total + 1) // 2
     score     = round(n_anomaly / n_total, 3)
     health    = round(max(0.0, min(100.0, (1.0 - score) * 100)), 1)
     deg       = round(100.0 - health, 1)
@@ -429,6 +429,11 @@ def _demo_features(c: dict) -> SensorFeatures:
         vib_asym_xy=round(abs(vx - vy) / max(v, 1), 3),
         vib_asym_xz=round(abs(vx - vz) / max(v, 1), 3),
     )
+
+
+@app.get("/", include_in_schema=False)
+def root():
+    return {"message": "API Maintenance Prédictive v3.1.0", "docs": "/docs", "health": "/health", "dashboard": "/dashboard"}
 
 
 @app.get("/demo", response_model=FleetResponse, response_model_exclude_none=True, tags=["Dashboard flotte"])
@@ -791,7 +796,7 @@ def predict(data: SensorFeatures):
     n_total   = len(votes_raw)
     score     = round(n_anomaly / n_total, 3)
     health    = round(max(0.0, min(100.0, (1.0 - score) * 100)), 1)
-    anomaly   = n_anomaly >= (n_total // 2 + 1)
+    anomaly   = n_anomaly >= (n_total + 1) // 2
 
     votes_readable = {k: ("ANOMALIE" if v == -1 else "normal") for k, v in votes_raw.items()}
     conf  = "HIGH"  if score > 0.75 else ("MEDIUM" if score > 0.45 else "LOW")
@@ -835,7 +840,7 @@ def predict_batch(data: List[SensorFeatures]):
     for i, item in enumerate(data):
         try:
             r = predict(item)
-            results.append({"index": i, "success": True, **r.dict()})
+            results.append({"index": i, "success": True, **r.model_dump()})
         except Exception as e:
             results.append({"index": i, "success": False, "error": str(e)})
     return {"count": len(results), "results": results}
