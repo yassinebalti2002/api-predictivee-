@@ -76,6 +76,10 @@ app = FastAPI(
     description="Détection d'anomalies et estimation RUL pour capteurs IoT industriels",
     version="3.1.0",
     default_response_class=PrettyJSONResponse,
+    servers=[
+        {"url": "https://api-predictivee.onrender.com", "description": "Production (Render)"},
+        {"url": "http://localhost:8000", "description": "Local"},
+    ],
 )
 
 app.add_middleware(
