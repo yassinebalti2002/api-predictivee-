@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentation API — Maintenance Prédictive v3.1.0</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #f8fafc;
+      color: #1e293b;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* ── Page de garde ── */
+    .cover {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 60px 40px;
+      page-break-after: always;
+    }
+
+    .cover-logo {
+      width: 80px; height: 80px;
+      background: linear-gradient(135deg, #3b82f6, #06b6d4);
+      border-radius: 20px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 36px; margin-bottom: 32px;
+      box-shadow: 0 0 40px rgba(59,130,246,0.4);
+    }
+
+    .cover h1 {
+      font-size: 38px; font-weight: 800;
+      letter-spacing: 2px; text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .cover h1 span { color: #60a5fa; }
+
+    .cover-sub {
+      font-size: 18px; color: #94a3b8;
+      margin-bottom: 8px;
+    }
+
+    .cover-badge {
+      display: inline-block;
+      background: #3b82f620;
+      border: 1px solid #3b82f6;
+      color: #60a5fa;
+      padding: 6px 20px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-top: 24px;
+    }
+
+    .cover-info {
+      margin-top: 60px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      width: 100%;
+      max-width: 700px;
+    }
+
+    .cover-info-item {
+      background: #ffffff10;
+      border: 1px solid #ffffff20;
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .cover-info-item .label { color: #64748b; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+    .cover-info-item .value { color: #e2e8f0; font-size: 16px; font-weight: 700; margin-top: 4px; }
+
+    .cover-footer {
+      margin-top: 80px;
+      color: #475569;
+      font-size: 12px;
+    }
+
+    /* ── Contenu ── */
+    .content { max-width: 900px; margin: 0 auto; padding: 40px 40px; }
+
+    /* ── Table des matières ── */
+    .toc {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 32px;
+      margin-bottom: 40px;
+      page-break-after: always;
+    }
+
+    .toc h2 { font-size: 20px; font-weight: 700; margin-bottom: 20px; color: #0f172a; border-bottom: 2px solid #3b82f6; padding-bottom: 10px; }
+    .toc ol { padding-left: 20px; }
+    .toc li { margin: 8px 0; color: #3b82f6; font-weight: 600; }
+    .toc li span { color: #475569; font-weight: 400; }
+
+    /* ── Sections ── */
+    .section { margin-bottom: 48px; }
+
+    .section-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: #0f172a;
+      border-left: 4px solid #3b82f6;
+      padding-left: 16px;
+      margin-bottom: 24px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+    }
+
+    .section-num {
+      display: inline-block;
+      background: #3b82f6;
+      color: white;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-right: 8px;
+    }
+
+    h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1e293b;
+      margin: 24px 0 12px 0;
+    }
+
+    p { margin-bottom: 12px; color: #475569; }
+
+    /* ── Cards ── */
+    .card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    /* ── Endpoint cards ── */
+    .endpoint-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 32px;
+      page-break-inside: avoid;
+    }
+
+    .endpoint-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 24px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .method {
+      padding: 5px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .method.get  { background: #dcfce7; color: #15803d; }
+    .method.post { background: #dbeafe; color: #1d4ed8; }
+
+    .endpoint-path {
+      font-family: "Courier New", monospace;
+      font-size: 16px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .endpoint-desc {
+      color: #64748b;
+      font-size: 13px;
+      margin-left: auto;
+    }
+
+    .endpoint-body { padding: 20px 24px; }
+
+    /* ── Code blocks ── */
+    pre {
+      background: #0f172a;
+      color: #e2e8f0;
+      border-radius: 8px;
+      padding: 20px;
+      font-family: "Courier New", monospace;
+      font-size: 12px;
+      line-height: 1.7;
+      overflow-x: auto;
+      margin: 12px 0;
+    }
+
+    .json-key    { color: #93c5fd; }
+    .json-str    { color: #86efac; }
+    .json-num    { color: #fde68a; }
+    .json-bool   { color: #f9a8d4; }
+    .json-comment { color: #64748b; font-style: italic; }
+
+    /* ── Tables ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 13px;
+    }
+
+    th {
+      background: #f1f5f9;
+      color: #374151;
+      font-weight: 700;
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #f1f5f9;
+      color: #475569;
+    }
+
+    tr:hover td { background: #f8fafc; }
+
+    .td-code {
+      font-family: "Courier New", monospace;
+      font-size: 12px;
+      color: #0f172a;
+      background: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    /* ── Badges ── */
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .badge-green  { background: #dcfce7; color: #15803d; }
+    .badge-blue   { background: #dbeafe; color: #1d4ed8; }
+    .badge-orange { background: #fed7aa; color: #c2410c; }
+    .badge-red    { background: #fee2e2; color: #dc2626; }
+    .badge-gray   { background: #f1f5f9; color: #475569; }
+
+    /* ── Info boxes ── */
+    .info-box {
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 16px 0;
+      display: flex;
+      gap: 12px;
+    }
+    .info-box.blue  { background: #eff6ff; border-left: 4px solid #3b82f6; }
+    .info-box.green { background: #f0fdf4; border-left: 4px solid #22c55e; }
+    .info-box.orange{ background: #fff7ed; border-left: 4px solid #f97316; }
+
+    .info-box-icon { font-size: 18px; flex-shrink: 0; }
+    .info-box-text { color: #374151; font-size: 13px; }
+    .info-box-text strong { color: #1e293b; }
+
+    /* ── Grid ── */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+
+    .stat-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+    }
+    .stat-card .num { font-size: 32px; font-weight: 800; color: #3b82f6; }
+    .stat-card .lbl { font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+
+    /* ── Test results ── */
+    .test-result {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 20px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+    .test-result.pass { background: #f0fdf4; border: 1px solid #bbf7d0; }
+    .test-result.fail { background: #fff1f2; border: 1px solid #fecdd3; }
+
+    .test-icon { font-size: 20px; }
+    .test-name { font-weight: 700; color: #1e293b; font-size: 14px; }
+    .test-detail { color: #64748b; font-size: 12px; }
+    .test-status { margin-left: auto; font-weight: 700; font-size: 13px; }
+    .test-status.ok { color: #16a34a; }
+    .test-status.err { color: #dc2626; }
+
+    /* ── Architecture diagram ── */
+    .arch-box {
+      background: white;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 13px;
+    }
+    .arch-arrow {
+      text-align: center;
+      font-size: 20px;
+      color: #94a3b8;
+      margin: 4px 0;
+    }
+
+    /* ── Print ── */
+    @media print {
+      body { background: white; }
+      .cover { page-break-after: always; }
+      .toc { page-break-after: always; }
+      .endpoint-card { page-break-inside: avoid; }
+      .no-print { display: none; }
+    }
+
+    /* ── Print button ── */
+    .print-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(59,130,246,0.4);
+      z-index: 999;
+    }
+    .print-btn:hover { background: #2563eb; }
+
+    hr.section-break {
+      border: none;
+      border-top: 2px solid #e2e8f0;
+      margin: 40px 0;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════ PAGE DE GARDE -->
+<div class="cover">
+  <div class="cover-logo">⚙️</div>
+  <h1><span>API</span> Maintenance Prédictive</h1>
+  <p class="cover-sub">Détection d'anomalies et estimation RUL pour capteurs IoT industriels</p>
+  <div class="cover-badge">Documentation Technique — Version 3.1.0</div>
+
+  <div class="cover-info">
+    <div class="cover-info-item">
+      <div class="label">Version</div>
+      <div class="value">3.1.0</div>
+    </div>
+    <div class="cover-info-item">
+      <div class="label">Framework</div>
+      <div class="value">FastAPI</div>
+    </div>
+    <div class="cover-info-item">
+      <div class="label">Modèles</div>
+      <div class="value">6 (Ensemble)</div>
+    </div>
+    <div class="cover-info-item">
+      <div class="label">Port</div>
+      <div class="value">8000</div>
+    </div>
+    <div class="cover-info-item">
+      <div class="label">Features</div>
+      <div class="value">31 features</div>
+    </div>
+    <div class="cover-info-item">
+      <div class="label">RUL Features</div>
+      <div class="value">46 features</div>
+    </div>
+  </div>
+
+  <div class="cover-footer">
+    <p>ISG BIZERTE &nbsp;·&nbsp; Projet IoT Industriel &nbsp;·&nbsp; 2026</p>
+    <p style="margin-top:6px">Auteur : Balti Med Yassine</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ CONTENU -->
+<div class="content">
+
+  <!-- TABLE DES MATIÈRES -->
+  <div class="toc">
+    <h2>📋 Table des matières</h2>
+    <ol>
+      <li>Présentation du projet <span>— Architecture et objectifs</span></li>
+      <li>Installation et démarrage <span>— Prérequis et lancement</span></li>
+      <li>Modèles d'apprentissage <span>— Ensemble de 6 modèles</span></li>
+      <li>Endpoints de l'API <span>— Liste complète avec exemples</span></li>
+      <li>Schémas de données <span>— Entrées et sorties détaillées</span></li>
+      <li>Tests Postman <span>— Résultats et captures</span></li>
+    </ol>
+  </div>
+
+  <!-- ═══ SECTION 1 ═══ -->
+  <div class="section">
+    <div class="section-title"><span class="section-num">1</span> Présentation du projet</div>
+
+    <p>Cette API REST permet la <strong>détection d'anomalies en temps réel</strong> et l'<strong>estimation de la durée de vie restante (RUL)</strong> de capteurs IoT industriels. Elle est conçue pour alimenter un dashboard de maintenance prédictive.</p>
+
+    <div class="grid-3" style="margin: 24px 0;">
+      <div class="stat-card">
+        <div class="num">6</div>
+        <div class="lbl">Modèles ML</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">31</div>
+        <div class="lbl">Features capteur</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">7</div>
+        <div class="lbl">Endpoints</div>
+      </div>
+    </div>
+
+    <h3>Architecture du système</h3>
+    <div class="card">
+      <div style="display:grid; grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr; align-items:center; gap:8px;">
+        <div class="arch-box" style="background:#eff6ff; border-color:#bfdbfe;">
+          🌐 Client<br><small style="color:#64748b">Postman / Dashboard</small>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-box" style="background:#f0fdf4; border-color:#bbf7d0;">
+          ⚡ FastAPI<br><small style="color:#64748b">Uvicorn :8000</small>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-box" style="background:#fef9c3; border-color:#fef08a;">
+          🧠 Ensemble<br><small style="color:#64748b">6 modèles ML</small>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-box" style="background:#fdf4ff; border-color:#e9d5ff;">
+          📊 Réponse<br><small style="color:#64748b">JSON + RUL</small>
+        </div>
+      </div>
+    </div>
+
+    <h3>Fonctionnalités principales</h3>
+    <table>
+      <thead>
+        <tr><th>Fonctionnalité</th><th>Description</th><th>Statut</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Détection d'anomalies</td><td>Vote majoritaire de 6 modèles ensemble</td><td><span class="badge badge-green">✓ Actif</span></td></tr>
+        <tr><td>Estimation RUL</td><td>Remaining Useful Life en heures et jours</td><td><span class="badge badge-green">✓ Actif</span></td></tr>
+        <tr><td>Dashboard flotte</td><td>Analyse de toute la flotte en une requête</td><td><span class="badge badge-green">✓ Actif</span></td></tr>
+        <tr><td>Dashboard HTML</td><td>Visualisation interactive dans le navigateur</td><td><span class="badge badge-green">✓ Actif</span></td></tr>
+        <tr><td>Traitement parallèle</td><td>ThreadPoolExecutor (max 8 workers)</td><td><span class="badge badge-green">✓ Actif</span></td></tr>
+        <tr><td>CORS</td><td>Autorisé pour toutes les origines</td><td><span class="badge badge-green">✓ Actif</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr class="section-break">
+
+  <!-- ═══ SECTION 2 ═══ -->
+  <div class="section">
+    <div class="section-title"><span class="section-num">2</span> Installation et démarrage</div>
+
+    <h3>Prérequis</h3>
+    <div class="card">
+      <table>
+        <thead><tr><th>Composant</th><th>Version</th><th>Rôle</th></tr></thead>
+        <tbody>
+          <tr><td>Python</td><td>3.9+</td><td>Environnement d'exécution</td></tr>
+          <tr><td>FastAPI</td><td>0.100+</td><td>Framework web</td></tr>
+          <tr><td>Uvicorn</td><td>0.23+</td><td>Serveur ASGI</td></tr>
+          <tr><td>scikit-learn</td><td>1.3+</td><td>Modèles ML</td></tr>
+          <tr><td>joblib</td><td>1.3+</td><td>Chargement des modèles</td></tr>
+          <tr><td>numpy</td><td>1.24+</td><td>Calculs numériques</td></tr>
+          <tr><td>pyod</td><td>1.1+</td><td>Modèles ECOD, HBOS, COPOD</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Structure des fichiers</h3>
+    <pre>API_PREDICTIVE/
+├── api.py                    <span class="json-comment"># Application principale</span>
+├── test_api.py               <span class="json-comment"># Script de test Python</span>
+├── documentation.html        <span class="json-comment"># Ce fichier</span>
+└── models/
+    ├── scaler_v3.pkl         <span class="json-comment"># Normalisation features</span>
+    ├── pca_v3.pkl            <span class="json-comment"># Réduction dimensionnelle</span>
+    ├── features_v3.pkl       <span class="json-comment"># Liste des 31 features</span>
+    ├── threshold_v3.pkl      <span class="json-comment"># Seuils de décision</span>
+    ├── model_if_v3.pkl       <span class="json-comment"># Isolation Forest</span>
+    ├── model_lof_v3.pkl      <span class="json-comment"># Local Outlier Factor</span>
+    ├── model_ocsvm_v3.pkl    <span class="json-comment"># One-Class SVM</span>
+    ├── model_ecod_v3.pkl     <span class="json-comment"># ECOD</span>
+    ├── model_hbos_v3.pkl     <span class="json-comment"># HBOS</span>
+    ├── model_copod_v3.pkl    <span class="json-comment"># COPOD</span>
+    ├── scaler_rul_v1.pkl     <span class="json-comment"># Normalisation RUL</span>
+    ├── features_rul_v1.pkl   <span class="json-comment"># 46 features RUL</span>
+    └── model_rul_v1.pkl      <span class="json-comment"># Modèle RUL</span></pre>
+
+    <h3>Lancement du serveur</h3>
+    <pre><span class="json-comment"># 1. Aller dans le dossier du projet</span>
+cd C:\Users\yassine\Desktop\API_PREDICTIVE
+
+<span class="json-comment"># 2. Lancer l'API</span>
+python api.py
+
+<span class="json-comment"># Sortie attendue :</span>
+<span class="json-str">Chargement des modèles...
+Modèles chargés — IF-LOF-OCSVM-ECOD-HBOS-COPOD — RUL: True
+INFO: Uvicorn running on http://0.0.0.0:8000</span></pre>
+
+    <div class="info-box blue">
+      <div class="info-box-icon">ℹ️</div>
+      <div class="info-box-text">
+        <strong>Accès Swagger UI :</strong> Une fois le serveur démarré, ouvre <code>http://localhost:8000/docs</code> dans le navigateur pour accéder à la documentation interactive.
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-break">
+
+  <!-- ═══ SECTION 3 ═══ -->
+  <div class="section">
+    <div class="section-title"><span class="section-num">3</span> Modèles d'apprentissage</div>
+
+    <p>L'API utilise un <strong>ensemble de 6 modèles de détection d'anomalies</strong>. La décision finale est prise par <strong>vote majoritaire</strong> (plus de la moitié des modèles doivent voter ANOMALIE).</p>
+
+    <table>
+      <thead>
+        <tr><th>Modèle</th><th>Abréviation</th><th>Type</th><th>Fichier</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Isolation Forest</td><td><span class="badge badge-blue">IF</span></td><td>Arbre de décision</td><td><span class="td-code">model_if_v3.pkl</span></td></tr>
+        <tr><td>Local Outlier Factor</td><td><span class="badge badge-blue">LOF</span></td><td>Densité locale</td><td><span class="td-code">model_lof_v3.pkl</span></td></tr>
+        <tr><td>One-Class SVM</td><td><span class="badge badge-blue">OCSVM</span></td><td>Séparateur à vaste marge</td><td><span class="td-code">model_ocsvm_v3.pkl</span></td></tr>
+        <tr><td>ECOD</td><td><span class="badge badge-blue">ECOD</span></td><td>Profondeur empirique</td><td><span class="td-code">model_ecod_v3.pkl</span></td></tr>
+        <tr><td>HBOS</td><td><span class="badge badge-blue">HBOS</span></td><td>Histogramme</td><td><span class="td-code">model_hbos_v3.pkl</span></td></tr>
+        <tr><td>COPOD</td><td><span class="badge badge-blue">COPOD</span></td><td>Copule statistique</td><td><span class="td-code">model_copod_v3.pkl</span></td></tr>
+      </tbody>
+    </table>
+
+    <h3>Règle de décision</h3>
+    <div class="card">
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:16px; text-align:center;">
+        <div style="padding:16px; background:#f0fdf4; border-radius:8px; border:1px solid #bbf7d0;">
+          <div style="font-size:24px; font-weight:800; color:#16a34a;">0–2/6</div>
+          <div style="color:#15803d; font-weight:700;">NORMAL</div>
+          <div style="color:#64748b; font-size:12px;">score &lt; 0.45</div>
+        </div>
+        <div style="padding:16px; background:#fffbeb; border-radius:8px; border:1px solid #fde68a;">
+          <div style="font-size:24px; font-weight:800; color:#d97706;">3/6</div>
+          <div style="color:#b45309; font-weight:700;">WARNING</div>
+          <div style="color:#64748b; font-size:12px;">score entre 0.45 et 0.75</div>
+        </div>
+        <div style="padding:16px; background:#fff1f2; border-radius:8px; border:1px solid #fecdd3;">
+          <div style="font-size:24px; font-weight:800; color:#dc2626;">4–6/6</div>
+          <div style="color:#b91c1c; font-weight:700;">CRITICAL</div>
+          <div style="color:#64748b; font-size:12px;">score &gt; 0.75</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <hr class="section-break">
+
+  <!-- ═══ SECTION 4 ═══ -->
+  <div class="section">
+    <div class="section-title"><span class="section-num">4</span> Endpoints de l'API</div>
+
+    <p>L'API expose <strong>7 endpoints</strong> accessibles à l'adresse <code>http://localhost:8000</code>.</p>
+
+    <div class="card" style="margin-bottom:32px;">
+      <table>
+        <thead><tr><th>Méthode</th><th>URL</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><span class="method get">GET</span></td><td><span class="td-code">/health</span></td><td>Statut de l'API et des modèles</td></tr>
+          <tr><td><span class="method get">GET</span></td><td><span class="td-code">/demo</span></td><td>Démonstration avec 19 capteurs pré-générés</td></tr>
+          <tr><td><span class="method get">GET</span></td><td><span class="td-code">/dashboard</span></td><td>Dashboard HTML interactif</td></tr>
+          <tr><td><span class="method post">POST</span></td><td><span class="td-code">/fleet</span></td><td>Analyse complète de la flotte (endpoint principal)</td></tr>
+          <tr><td><span class="method post">POST</span></td><td><span class="td-code">/predict</span></td><td>Prédiction pour un capteur unique</td></tr>
+          <tr><td><span class="method post">POST</span></td><td><span class="td-code">/predict-rul</span></td><td>Estimation RUL pour un capteur unique</td></tr>
+          <tr><td><span class="method post">POST</span></td><td><span class="td-code">/predict-batch</span></td><td>Prédiction sur un lot de capteurs</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- GET /health -->
+    <div class="endpoint-card">
+      <div class="endpoint-header">
+        <span class="method get">GET</span>
+        <span class="endpoint-path">/health</span>
+        <span class="endpoint-desc">Statut de l'API</span>
+      </div>
+      <div class="endpoint-body">
+        <p>Vérifie que l'API est opérationnelle et retourne l'état des modèles chargés.</p>
+        <h3>Réponse (200 OK)</h3>
+        <pre>{
+  <span class="json-key">"status"</span>: <span class="json-str">"ok"</span>,
+  <span class="json-key">"version"</span>: <span class="json-str">"3.1.0"</span>,
+  <span class="json-key">"timestamp"</span>: <span class="json-str">"2026-06-14T12:28:18"</span>,
+  <span class="json-key">"modeles"</span>: {
+    <span class="json-key">"ensemble"</span>: <span class="json-str">"IF-LOF-OCSVM-ECOD-HBOS-COPOD"</span>,
+    <span class="json-key">"taille"</span>: <span class="json-num">6</span>,
+    <span class="json-key">"rul_disponible"</span>: <span class="json-bool">true</span>
+  },
+  <span class="json-key">"features"</span>: {
+    <span class="json-key">"anomalie"</span>: <span class="json-num">31</span>,
+    <span class="json-key">"rul"</span>: <span class="json-num">46</span>
+  }
+}</pre>
+      </div>
+    </div>
+
+    <!-- POST /predict -->
+    <div class="endpoint-card">
+      <div class="endpoint-header">
+        <span class="method post">POST</span>
+        <span class="endpoint-path">/predict</span>
+        <span class="endpoint-desc">Détection anomalie capteur unique</span>
+      </div>
+      <div class="endpoint-body">
+        <p>Analyse un capteur unique et retourne le résultat de détection d'anomalie avec le vote de chaque modèle.</p>
+
+        <h3>Corps de la requête (31 features)</h3>
+        <pre>{
+  <span class="json-key">"temp_mean"</span>: <span class="json-num">85.0</span>,     <span class="json-comment">// Température moyenne (°C)</span>
+  <span class="json-key">"temp_std"</span>: <span class="json-num">8.5</span>,      <span class="json-comment">// Écart-type température</span>
+  <span class="json-key">"temp_trend"</span>: <span class="json-num">2.5</span>,    <span class="json-comment">// Tendance température</span>
+  <span class="json-key">"temp_cur"</span>: <span class="json-num">90.0</span>,     <span class="json-comment">// Température actuelle (°C)</span>
+  <span class="json-key">"vib_z_mean"</span>: <span class="json-num">95.0</span>,   <span class="json-comment">// Vibration Z moyenne (mg)</span>
+  <span class="json-key">"vib_z_std"</span>: <span class="json-num">18.0</span>,    <span class="json-comment">// Vibration Z écart-type</span>
+  <span class="json-key">"vib_z_rms_w"</span>: <span class="json-num">98.0</span>,  <span class="json-comment">// Vibration Z RMS pondéré</span>
+  <span class="json-key">"vib_z_kurt"</span>: <span class="json-num">4.5</span>,    <span class="json-comment">// Kurtosis vibration Z</span>
+  <span class="json-key">"vib_z_crest"</span>: <span class="json-num">4.2</span>,   <span class="json-comment">// Facteur de crête Z</span>
+  <span class="json-key">"vib_z_cur"</span>: <span class="json-num">100.0</span>,   <span class="json-comment">// Vibration Z actuelle</span>
+  <span class="json-key">"vib_x_mean"</span>: <span class="json-num">72.0</span>,   <span class="json-comment">// Vibration X moyenne</span>
+  <span class="json-key">"vib_x_std"</span>: <span class="json-num">15.0</span>,    <span class="json-comment">// Vibration X écart-type</span>
+  <span class="json-key">"vib_x_rms_w"</span>: <span class="json-num">74.0</span>,  <span class="json-comment">// Vibration X RMS</span>
+  <span class="json-key">"vib_x_kurt"</span>: <span class="json-num">3.8</span>,    <span class="json-comment">// Kurtosis vibration X</span>
+  <span class="json-key">"vib_y_mean"</span>: <span class="json-num">68.0</span>,   <span class="json-comment">// Vibration Y moyenne</span>
+  <span class="json-key">"vib_y_std"</span>: <span class="json-num">14.0</span>,    <span class="json-comment">// Vibration Y écart-type</span>
+  <span class="json-key">"vib_y_rms_w"</span>: <span class="json-num">70.0</span>,  <span class="json-comment">// Vibration Y RMS</span>
+  <span class="json-key">"vib_y_kurt"</span>: <span class="json-num">3.5</span>,    <span class="json-comment">// Kurtosis vibration Y</span>
+  <span class="json-key">"vib_total"</span>: <span class="json-num">140.0</span>,   <span class="json-comment">// Vibration totale combinée</span>
+  <span class="json-key">"health_score"</span>: <span class="json-num">15.0</span>,  <span class="json-comment">// Score santé brut [0-100]</span>
+  <span class="json-key">"acc_p2p"</span>: <span class="json-num">200.0</span>,     <span class="json-comment">// Accélération peak-to-peak</span>
+  <span class="json-key">"acc_z2p"</span>: <span class="json-num">100.0</span>,     <span class="json-comment">// Accélération zero-to-peak</span>
+  <span class="json-key">"acc_crest"</span>: <span class="json-num">4.2</span>,     <span class="json-comment">// Facteur de crête accélération</span>
+  <span class="json-key">"acc_rms"</span>: <span class="json-num">98.0</span>,      <span class="json-comment">// Accélération RMS</span>
+  <span class="json-key">"current_mean"</span>: <span class="json-num">8.5</span>,   <span class="json-comment">// Courant moyen (A)</span>
+  <span class="json-key">"delta_vib"</span>: <span class="json-num">12.0</span>,    <span class="json-comment">// Variation vibration</span>
+  <span class="json-key">"delta_temp"</span>: <span class="json-num">5.0</span>,    <span class="json-comment">// Variation température</span>
+  <span class="json-key">"vib_entropy"</span>: <span class="json-num">3.8</span>,   <span class="json-comment">// Entropie signal vibration</span>
+  <span class="json-key">"fft_ratio"</span>: <span class="json-num">2.1</span>,     <span class="json-comment">// Ratio FFT</span>
+  <span class="json-key">"vib_asym_xy"</span>: <span class="json-num">1.8</span>,   <span class="json-comment">// Asymétrie vibration X/Y</span>
+  <span class="json-key">"vib_asym_xz"</span>: <span class="json-num">1.5</span>    <span class="json-comment">// Asymétrie vibration X/Z</span>
+}</pre>
+
+        <h3>Réponse (200 OK)</h3>
+        <pre>{
+  <span class="json-key">"anomaly"</span>: <span class="json-bool">false</span>,
+  <span class="json-key">"anomaly_score"</span>: <span class="json-num">0.5</span>,          <span class="json-comment">// [0-1] : plus élevé = plus anormal</span>
+  <span class="json-key">"health_score"</span>: <span class="json-num">50.0</span>,          <span class="json-comment">// [0-100] : plus bas = plus dégradé</span>
+  <span class="json-key">"votes"</span>: {
+    <span class="json-key">"isolation_forest"</span>: <span class="json-str">"ANOMALIE"</span>,
+    <span class="json-key">"lof"</span>: <span class="json-str">"ANOMALIE"</span>,
+    <span class="json-key">"ocsvm"</span>: <span class="json-str">"ANOMALIE"</span>,
+    <span class="json-key">"ecod"</span>: <span class="json-str">"normal"</span>,
+    <span class="json-key">"hbos"</span>: <span class="json-str">"normal"</span>,
+    <span class="json-key">"copod"</span>: <span class="json-str">"normal"</span>
+  },
+  <span class="json-key">"confidence"</span>: <span class="json-str">"MEDIUM"</span>,         <span class="json-comment">// LOW / MEDIUM / HIGH</span>
+  <span class="json-key">"alert_level"</span>: <span class="json-str">"WARNING"</span>        <span class="json-comment">// OK / WARNING / CRITICAL</span>
+}</pre>
+      </div>
+    </div>
+
+    <!-- POST /fleet -->
+    <div class="endpoint-card">
+      <div class="endpoint-header">
+        <span class="method post">POST</span>
+        <span class="endpoint-path">/fleet</span>
+        <span class="endpoint-desc">Endpoint principal du dashboard</span>
+      </div>
+      <div class="endpoint-body">
+        <p>Analyse toute la flotte de capteurs en une seule requête. Retourne une vue globale du parc et le détail de chaque capteur.</p>
+
+        <h3>Corps de la requête</h3>
+        <pre>{
+  <span class="json-key">"total_installes"</span>: <span class="json-num">3</span>,           <span class="json-comment">// Nombre total de capteurs installés</span>
+  <span class="json-key">"capteurs"</span>: [
+    {
+      <span class="json-key">"id"</span>: <span class="json-str">"capteur-anomalie"</span>,          <span class="json-comment">// Identifiant unique</span>
+      <span class="json-key">"features"</span>: { <span class="json-comment">/* 31 features */</span> },
+      <span class="json-key">"historique"</span>: [ <span class="json-comment">/* optionnel — pour graphiques */</span> ]
+    }
+  ]
+}</pre>
+
+        <h3>Réponse (200 OK)</h3>
+        <pre>{
+  <span class="json-key">"timestamp"</span>: <span class="json-str">"2026-06-14T12:42:16"</span>,
+  <span class="json-key">"modeles"</span>: <span class="json-str">"IF-LOF-OCSVM-ECOD-HBOS-COPOD"</span>,
+  <span class="json-key">"version_api"</span>: <span class="json-str">"3.1.0"</span>,
+  <span class="json-key">"vue_globale"</span>: {
+    <span class="json-key">"capteurs_actifs"</span>: <span class="json-num">2</span>,
+    <span class="json-key">"total_installes"</span>: <span class="json-num">3</span>,
+    <span class="json-key">"en_anomalie"</span>: <span class="json-num">0</span>,
+    <span class="json-key">"taux_anomalie_pct"</span>: <span class="json-num">0.0</span>,
+    <span class="json-key">"sante_moyenne"</span>: <span class="json-num">58.4</span>,
+    <span class="json-key">"rul_minimum"</span>: {
+      <span class="json-key">"valeur_h"</span>: <span class="json-num">1026.2</span>,
+      <span class="json-key">"capteur_id"</span>: <span class="json-str">"capteur-anomalie"</span>
+    },
+    <span class="json-key">"temp_max_parc"</span>: { <span class="json-key">"valeur_c"</span>: <span class="json-num">90.0</span>, <span class="json-key">"capteur_id"</span>: <span class="json-str">"capteur-anomalie"</span> },
+    <span class="json-key">"vib_max_parc"</span>:  { <span class="json-key">"valeur_mg"</span>: <span class="json-num">140.0</span>, <span class="json-key">"capteur_id"</span>: <span class="json-str">"capteur-anomalie"</span> }
+  },
+  <span class="json-key">"capteurs"</span>: [
+    {
+      <span class="json-key">"id"</span>: <span class="json-str">"capteur-anomalie"</span>,
+      <span class="json-key">"anomalie"</span>: <span class="json-bool">false</span>,
+      <span class="json-key">"score_anomalie"</span>: <span class="json-num">0.5</span>,
+      <span class="json-key">"score_sante"</span>: <span class="json-num">50.0</span>,
+      <span class="json-key">"niveau_alerte"</span>: <span class="json-str">"WARNING"</span>,
+      <span class="json-key">"niveau_risque"</span>: <span class="json-str">"MODÉRÉ"</span>,
+      <span class="json-key">"votes"</span>: { <span class="json-comment">/* vote de chaque modèle */</span> },
+      <span class="json-key">"vote_resume"</span>: <span class="json-str">"3/6 votes · 50%"</span>,
+      <span class="json-key">"iteration"</span>: <span class="json-num">1</span>,
+      <span class="json-key">"rul"</span>: {
+        <span class="json-key">"heures"</span>: <span class="json-num">1026.2</span>,
+        <span class="json-key">"jours"</span>: <span class="json-num">42.8</span>,
+        <span class="json-key">"statut"</span>: <span class="json-str">"STABLE — surveillance recommandée"</span>,
+        <span class="json-key">"degradation_pct"</span>: <span class="json-num">88.3</span>,
+        <span class="json-key">"alerte"</span>: <span class="json-str">"STABLE"</span>
+      },
+      <span class="json-key">"mesures"</span>: {
+        <span class="json-key">"temperature_c"</span>: <span class="json-num">90.0</span>,
+        <span class="json-key">"vib_z_rms_mg"</span>: <span class="json-num">98.0</span>,
+        <span class="json-key">"vib_x_rms_mg"</span>: <span class="json-num">74.0</span>,
+        <span class="json-key">"vib_y_rms_mg"</span>: <span class="json-num">70.0</span>,
+        <span class="json-key">"vib_totale_mg"</span>: <span class="json-num">140.0</span>,
+        <span class="json-key">"kurtosis_z"</span>: <span class="json-num">4.5</span>,
+        <span class="json-key">"degradation_pct"</span>: <span class="json-num">50.0</span>,
+        <span class="json-key">"tendance_vib"</span>: <span class="json-str">"Hausse"</span>
+      }
+    }
+  ]
+}</pre>
+      </div>
+    </div>
+
+    <!-- POST /predict-rul -->
+    <div class="endpoint-card">
+      <div class="endpoint-header">
+        <span class="method post">POST</span>
+        <span class="endpoint-path">/predict-rul</span>
+        <span class="endpoint-desc">Estimation RUL capteur unique</span>
+      </div>
+      <div class="endpoint-body">
+        <h3>Corps de la requête</h3>
+        <pre>{
+  <span class="json-key">"features"</span>: {
+    <span class="json-key">"temp_cur"</span>: <span class="json-num">90.0</span>,
+    <span class="json-key">"vib_total"</span>: <span class="json-num">140.0</span>
+    <span class="json-comment">// ... autres features RUL</span>
+  }
+}</pre>
+        <h3>Réponse (200 OK)</h3>
+        <pre>{
+  <span class="json-key">"rul_hours"</span>: <span class="json-num">1026.2</span>,
+  <span class="json-key">"rul_days"</span>: <span class="json-num">42.8</span>,
+  <span class="json-key">"confidence"</span>: <span class="json-str">"MEDIUM"</span>,
+  <span class="json-key">"status"</span>: <span class="json-str">"STABLE — surveillance recommandée"</span>
+}</pre>
+      </div>
+    </div>
+
+  </div>
+
+  <hr class="section-break">
+
+  <!-- ═══ SECTION 5 ═══ -->
+  <div class="section">
+    <div class="section-title"><span class="section-num">5</span> Schémas de données</div>
+
+    <h3>Les 31 features d'entrée</h3>
+    <table>
+      <thead>
+        <tr><th>#</th><th>Feature</th><th>Description</th><th>Unité</th><th>Défaut</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td><span class="td-code">temp_mean</span></td><td>Température moyenne</td><td>°C</td><td>—</td></tr>
+        <tr><td>2</td><td><span class="td-code">temp_std</span></td><td>Écart-type température</td><td>°C</td><td>—</td></tr>
+        <tr><td>3</td><td><span class="td-code">temp_trend</span></td><td>Tendance température</td><td>—</td><td>0.0</td></tr>
+        <tr><td>4</td><td><span class="td-code">temp_cur</span></td><td>Température actuelle</td><td>°C</td><td>—</td></tr>
+        <tr><td>5</td><td><span class="td-code">vib_z_mean</span></td><td>Vibration Z moyenne</td><td>mg</td><td>—</td></tr>
+        <tr><td>6</td><td><span class="td-code">vib_z_std</span></td><td>Vibration Z écart-type</td><td>mg</td><td>—</td></tr>
+        <tr><td>7</td><td><span class="td-code">vib_z_rms_w</span></td><td>Vibration Z RMS pondéré</td><td>mg</td><td>—</td></tr>
+        <tr><td>8</td><td><span class="td-code">vib_z_kurt</span></td><td>Kurtosis vibration Z</td><td>—</td><td>0.0</td></tr>
+        <tr><td>9</td><td><span class="td-code">vib_z_crest</span></td><td>Facteur de crête Z</td><td>—</td><td>1.0</td></tr>
+        <tr><td>10</td><td><span class="td-code">vib_z_cur</span></td><td>Vibration Z actuelle</td><td>mg</td><td>—</td></tr>
+        <tr><td>11</td><td><span class="td-code">vib_x_mean</span></td><td>Vibration X moyenne</td><td>mg</td><td>—</td></tr>
+        <tr><td>12</td><td><span class="td-code">vib_x_std</span></td><td>Vibration X écart-type</td><td>mg</td><td>0.0</td></tr>
+        <tr><td>13</td><td><span class="td-code">vib_x_rms_w</span></td><td>Vibration X RMS</td><td>mg</td><td>—</td></tr>
+        <tr><td>14</td><td><span class="td-code">vib_x_kurt</span></td><td>Kurtosis vibration X</td><td>—</td><td>0.0</td></tr>
+        <tr><td>15</td><td><span class="td-code">vib_y_mean</span></td><td>Vibration Y moyenne</td><td>mg</td><td>—</td></tr>
+        <tr><td>16</td><td><span class="td-code">vib_y_std</span></td><td>Vibration Y écart-type</td><td>mg</td><td>0.0</td></tr>
+        <tr><td>17</td><td><span class="td-code">vib_y_rms_w</span></td><td>Vibration Y RMS</td><td>mg</td><td>—</td></tr>
+        <tr><td>18</td><td><span class="td-code">vib_y_kurt</span></td><td>Kurtosis vibration Y</td><td>—</td><td>0.0</td></tr>
+        <tr><td>19</td><td><span class="td-code">vib_total</span></td><td>Vibration totale combinée</td><td>mg</td><td>—</td></tr>
+        <tr><td>20</td><td><span class="td-code">health_score</span></td><td>Score santé brut</td><td>[0-100]</td><td>100.0</td></tr>
+        <tr><td>21</td><td><span class="td-code">acc_p2p</span></td><td>Accélération peak-to-peak</td><td>mg</td><td>—</td></tr>
+        <tr><td>22</td><td><span class="td-code">acc_z2p</span></td><td>Accélération zero-to-peak</td><td>mg</td><td>—</td></tr>
+        <tr><td>23</td><td><span class="td-code">acc_crest</span></td><td>Facteur de crête accélération</td><td>—</td><td>1.0</td></tr>
+        <tr><td>24</td><td><span class="td-code">acc_rms</span></td><td>Accélération RMS</td><td>mg</td><td>—</td></tr>
+        <tr><td>25</td><td><span class="td-code">current_mean</span></td><td>Courant moyen</td><td>A</td><td>—</td></tr>
+        <tr><td>26</td><td><span class="td-code">delta_vib</span></td><td>Variation vibration intra-fenêtre</td><td>mg</td><td>0.0</td></tr>
+        <tr><td>27</td><td><span class="td-code">delta_temp</span></td><td>Variation température intra-fenêtre</td><td>°C</td><td>0.0</td></tr>
+        <tr><td>28</td><td><span class="td-code">vib_entropy</span></td><td>Entropie signal vibration</td><td>—</td><td>0.0</td></tr>
+        <tr><td>29</td><td><span class="td-code">fft_ratio</span></td><td>Ratio FFT (périodicité anormale)</td><td>—</td><td>0.0</td></tr>
+        <tr><td>30</td><td><span class="td-code">vib_asym_xy</span></td><td>Asymétrie vibration X/Y</td><td>—</td><td>0.0</td></tr>
+        <tr><td>31</td><td><span class="td-code">vib_asym_xz</span></td><td>Asymétrie vibration X/Z</td><td>—</td><td>0.0</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr class="section-break">
+
+  <!-- ═══ SECTION 6 ═══ -->
+  <div class="section">
+    <div class="section-title"><span class="section-num">6</span> Tests Postman — Résultats</div>
+
+    <p>Tests effectués le <strong>14 juin 2026</strong> avec Postman sur <code>http://localhost:8000</code>.</p>
+
+    <div class="test-result pass">
+      <div class="test-icon">✅</div>
+      <div>
+        <div class="test-name">GET /health</div>
+        <div class="test-detail">Vérification du statut API et des modèles chargés</div>
+      </div>
+      <div class="test-status ok">200 OK · 70 ms</div>
+    </div>
+
+    <div class="test-result pass">
+      <div class="test-icon">✅</div>
+      <div>
+        <div class="test-name">POST /predict — Capteur anomalie</div>
+        <div class="test-detail">Détection avec capteur en état critique (temp=90°C, vib=140mg)</div>
+      </div>
+      <div class="test-status ok">200 OK</div>
+    </div>
+
+    <div class="test-result pass">
+      <div class="test-icon">✅</div>
+      <div>
+        <div class="test-name">POST /fleet — Flotte 2 capteurs</div>
+        <div class="test-detail">Analyse flotte complète, vue globale + détail capteurs</div>
+      </div>
+      <div class="test-status ok">200 OK · 2.22 s · 2.44 KB</div>
+    </div>
+
+    <h3 style="margin-top: 28px;">Résultat POST /predict (capteur en anomalie)</h3>
+    <div class="card">
+      <div class="grid-2" style="gap:20px;">
+        <div>
+          <p><strong>Votes des modèles :</strong></p>
+          <table>
+            <thead><tr><th>Modèle</th><th>Résultat</th></tr></thead>
+            <tbody>
+              <tr><td>Isolation Forest</td><td><span class="badge badge-red">ANOMALIE</span></td></tr>
+              <tr><td>LOF</td><td><span class="badge badge-red">ANOMALIE</span></td></tr>
+              <tr><td>OCSVM</td><td><span class="badge badge-red">ANOMALIE</span></td></tr>
+              <tr><td>ECOD</td><td><span class="badge badge-green">normal</span></td></tr>
+              <tr><td>HBOS</td><td><span class="badge badge-green">normal</span></td></tr>
+              <tr><td>COPOD</td><td><span class="badge badge-green">normal</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <p><strong>Décision finale :</strong></p>
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:16px; margin-top:8px;">
+            <div style="margin-bottom:10px;"><span style="color:#64748b;">Anomalie :</span> <span class="badge badge-gray">false (3/6 votes)</span></div>
+            <div style="margin-bottom:10px;"><span style="color:#64748b;">Score :</span> <strong>0.5</strong></div>
+            <div style="margin-bottom:10px;"><span style="color:#64748b;">Santé :</span> <strong>50.0 / 100</strong></div>
+            <div style="margin-bottom:10px;"><span style="color:#64748b;">Alerte :</span> <span class="badge badge-orange">WARNING</span></div>
+            <div><span style="color:#64748b;">Confiance :</span> <strong>MEDIUM</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Résultat POST /fleet (vue globale)</h3>
+    <div class="card">
+      <div class="grid-3">
+        <div style="text-align:center; padding:12px; background:#f8fafc; border-radius:8px;">
+          <div style="font-size:28px; font-weight:800; color:#3b82f6;">2</div>
+          <div style="font-size:11px; color:#64748b; text-transform:uppercase;">Capteurs actifs</div>
+        </div>
+        <div style="text-align:center; padding:12px; background:#f8fafc; border-radius:8px;">
+          <div style="font-size:28px; font-weight:800; color:#16a34a;">0</div>
+          <div style="font-size:11px; color:#64748b; text-transform:uppercase;">En anomalie</div>
+        </div>
+        <div style="text-align:center; padding:12px; background:#f8fafc; border-radius:8px;">
+          <div style="font-size:28px; font-weight:800; color:#f59e0b;">58.4</div>
+          <div style="font-size:11px; color:#64748b; text-transform:uppercase;">Santé moyenne</div>
+        </div>
+      </div>
+      <div style="margin-top:16px; padding:12px; background:#f8fafc; border-radius:8px;">
+        <span style="color:#64748b; font-size:13px;">RUL minimum :</span>
+        <strong style="margin-left:8px;">1026.2 h (42.8 jours)</strong>
+        <span style="color:#64748b; font-size:12px; margin-left:8px;">— capteur-anomalie</span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══ FOOTER ═══ -->
+  <div style="text-align:center; padding: 40px 0; color: #94a3b8; font-size: 12px; border-top: 1px solid #e2e8f0; margin-top: 40px;">
+    <p><strong>API Maintenance Prédictive v3.1.0</strong></p>
+    <p style="margin-top:4px;">ISG BIZERTE &nbsp;·&nbsp; Balti Med Yassine &nbsp;·&nbsp; 2026</p>
+    <p style="margin-top:4px;">FastAPI · Scikit-learn · PyOD · Uvicorn</p>
+  </div>
+
+</div>
+
+<!-- Bouton d'impression -->
+<button class="print-btn no-print" onclick="window.print()">
+  🖨️ Exporter en PDF
+</button>
+
+</body>
+</html>

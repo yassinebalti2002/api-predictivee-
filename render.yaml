@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: api-predictive
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: starter          # 512 MB RAM — passe à "standard" (7$/mois) si OOM
+    region: frankfurt      # Europe — plus proche de la Tunisie
+    envVars:
+      - key: PORT
+        value: 8000
+    healthCheckPath: /health

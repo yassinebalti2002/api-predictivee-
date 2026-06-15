@@ -1,0 +1,55 @@
+{
+  "meta": {
+    "model": "GradientBoostingRegressor",
+    "version": "v1",
+    "trained_at": "2026-06-10T10:43:49",
+    "n_features": 46
+  },
+  "dataset": {
+    "n_train": 9600,
+    "n_test": 2400,
+    "total": 12000
+  },
+  "performance": {
+    "mae_train_h": 286.08,
+    "mae_test_h": 317.09,
+    "mae_test_pct": 37.5,
+    "rmse_test_h": 427.73,
+    "r2_test": 0.5594,
+    "cv_mae_h": 320.86,
+    "cv_std_h": 9.14
+  },
+  "random_forest_comparison": {
+    "mae_test_h": 315.0,
+    "r2_test": 0.5656
+  },
+  "top10_features": [
+    { "rank": 1,  "feature": "spec_total_energy",   "importance": 0.4024 },
+    { "rank": 2,  "feature": "vib_z_std",            "importance": 0.1080 },
+    { "rank": 3,  "feature": "health_score",         "importance": 0.0708 },
+    { "rank": 4,  "feature": "vib_total",            "importance": 0.0665 },
+    { "rank": 5,  "feature": "env_rms",              "importance": 0.0487 },
+    { "rank": 6,  "feature": "wavelet_entropy",      "importance": 0.0284 },
+    { "rank": 7,  "feature": "vib_z_rms_w",          "importance": 0.0227 },
+    { "rank": 8,  "feature": "vib_x_rms_w",          "importance": 0.0193 },
+    { "rank": 9,  "feature": "vib_z_cur",            "importance": 0.0187 },
+    { "rank": 10, "feature": "temp_mean",            "importance": 0.0172 }
+  ],
+  "feature_cols": [
+    "temp_mean", "temp_std", "temp_trend", "temp_cur",
+    "vib_z_mean", "vib_z_std", "vib_z_rms_w", "vib_z_kurt", "vib_z_crest", "vib_z_cur",
+    "vib_x_mean", "vib_x_std", "vib_x_rms_w", "vib_x_kurt",
+    "vib_y_mean", "vib_y_std", "vib_y_rms_w", "vib_y_kurt",
+    "vib_xy_ratio", "vib_xz_ratio",
+    "current_mean", "current_std",
+    "vib_total", "health_score", "acc_p2p",
+    "spec_peak_freq", "spec_centroid", "spec_bandwidth", "spec_entropy",
+    "spec_flatness", "spec_total_energy",
+    "spec_band_low_ratio", "spec_band_mid_ratio", "spec_band_high_ratio",
+    "env_kurtosis", "env_rms", "env_crest",
+    "bearing_bpfo_snr", "bearing_bpfi_snr", "bearing_bsf_snr", "bearing_fault_severity",
+    "spectral_skewness", "spectral_kurtosis",
+    "harmonic_ratio", "noise_ratio",
+    "wavelet_entropy"
+  ]
+}
